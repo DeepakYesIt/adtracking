@@ -193,7 +193,7 @@ class Adtraking {
         // this function call for start session
         fun startSession(context:Context): Long {
             this.context=context
-            // This is Executors services and get the Advertising Id if user enable the Advertising
+            // This is CoroutineScope and get the Advertising Id if user enable the Advertising
             // from the setting
             getAdvertisingId()
             return Calendar.getInstance().time.time
@@ -205,7 +205,24 @@ class Adtraking {
                 context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
         }
 
-        fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
+
+       /**
+        * The onRequestPermissionsResult function is called when the user responds to a permission request. It takes two parameters: requestCode (an integer representing the code for the permission request) and grantResults (an array of integers representing the result for each requested permission).
+       Within the function:
+
+       1. It checks if the requestCode is 101, indicating that the permission request pertains to location services.
+
+       2. It verifies if grantResults is not empty and whether the first element in grantResults array indicates that the permission was granted.
+
+            Note: There is an error in the permission check logic.
+            * It should use grantResults[0] == PackageManager.PERMISSION_GRANTED, but it incorrectly uses grantResults[0] + grantResults[0] == PackageManager.PERMISSION_GRANTED.
+
+       3. If the permission is granted, it calls the displayLocationSettingsRequest(context) method, which presumably initiates a request to display the location settings.
+
+       4. If the permission is not granted, it calls the alertBoxLocation() method, which likely displays an alert box to the user indicating that location permissions are necessary.
+        */
+
+       fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
             // Check if the location permission is granted by the user
             if (requestCode == 101 && grantResults.isNotEmpty() && (grantResults[0] + grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     displayLocationSettingsRequest(context)
@@ -214,6 +231,22 @@ class Adtraking {
                 }
         }
 
+
+        /**
+         *
+         The onActivityResult function is called when an activity that was started for a result returns its result. This function takes two parameters: requestCode (an integer identifying the request) and resultCode (an integer representing the result of the activity).
+        Within the function:
+
+        1. It first checks if the requestCode is 100, indicating that the result is related to the location permission request.
+
+        2. If the requestCode is 100, it then checks if the resultCode is Activity.RESULT_OK, which indicates that the location permission was successfully granted by the user.
+
+            1. If the resultCode is Activity.RESULT_OK, it calls the apiData() method, which presumably initiates some data fetching or API call that requires location access.
+            2. If the resultCode is not Activity.RESULT_OK, it shows a toast message to the user saying "Please turn on location".
+
+        3. If the requestCode is not 100, it calls the displayLocationSettingsRequest(context) method, which likely initiates a request to display the location settings to the user.
+
+         * */
         fun onActivityResult(requestCode: Int, resultCode: Int) {
             // Check if the location permission is granted by the user
             if (requestCode == 100) {
@@ -226,6 +259,10 @@ class Adtraking {
                 displayLocationSettingsRequest(context)
             }
         }
+
+        /**
+         * This is alert function show when permission is not enable in the app setting
+         */
         private fun alertBoxLocation() {
             val builder = AlertDialog.Builder(context)
             //set title for alert dialog
@@ -233,10 +270,8 @@ class Adtraking {
             //set message for alert dialog
             builder.setMessage(R.string.dialogMessage)
             builder.setIcon(android.R.drawable.ic_dialog_alert)
-
             //performing positive action
             builder.setPositiveButton("Yes") { _, _ ->
-
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri = Uri.fromParts("package", context.packageName, null)
                 intent.data = uri
@@ -254,6 +289,10 @@ class Adtraking {
             alertDialog.show()
         }
 
+
+        /**
+         * This function is use for when mobile location is disable of the user mobile
+         */
         private fun displayLocationSettingsRequest(context: Context) {
             val locationRequest = LocationRequest.create().apply {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
@@ -295,6 +334,9 @@ class Adtraking {
             }
         }
 
+        /**
+         * This function is use for check location permission in the app
+         */
         private fun isLocationPermissionGranted(context: Context): Boolean {
             // Check if the location permission is granted
             return ContextCompat.checkSelfPermission(
@@ -303,7 +345,9 @@ class Adtraking {
             ) == PackageManager.PERMISSION_GRANTED
         }
 
-        // this function call for get Session
+        /**
+         * this function call for get Session
+         */
         private fun getSessionStart(sessionStartTime: Long): String {
             val currentTime = Calendar.getInstance().time.time
             val diff = currentTime - sessionStartTime
@@ -314,7 +358,9 @@ class Adtraking {
         }
 
 
-        // this line use for hem
+        /*
+         *this line use for hem
+         */
         private fun calculateMD5HashEmail(email: String): String {
             try {
                 val digest = MessageDigest.getInstance("MD5")
@@ -336,7 +382,9 @@ class Adtraking {
         }
 
 
-        // this function call for imei
+        /**
+         * this function call for imei
+         * */
         @SuppressLint("HardwareIds")
         private fun getIMEI(context: Context): String {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -429,20 +477,21 @@ class Adtraking {
             return ""
         }
 
+
+        /**
+         * This function call when all data from the user and click the final function
+         */
         @SuppressLint("HardwareIds")
         fun froyoUploadData(gender: String, licenseKey: String, yod: String, email:String) {
-
             // This is check condition if network is enable then execute the if condition
             if (isOnline(context)) {
                 this.gender=gender
                 this.licensekey=licenseKey
                 this.yod=yod
                 this.email=email
-
-                // This is Executors services and get the Advertising Id if user enable the Advertising
+                // This is CoroutineScope and get the Advertising Id if user enable the Advertising
                 // from the setting
                 getAdvertisingId()
-
                 // Check if the location permission is granted
                 if (isLocationPermissionGranted(context)) {
                     // Location permission is already granted, and check gps is enable or not if enable the call the api
@@ -508,9 +557,6 @@ class Adtraking {
                 country=postalcodcountry.split(":")[1]
                 speed = gps.getLocation()!!.speedAccuracyMetersPerSecond
             }
-
-
-            Toast.makeText(context,"advertisingId"+advertisingId,Toast.LENGTH_SHORT).show()
 
             val deviceModel = getDeviceModel()
             val maidID = "GAID"

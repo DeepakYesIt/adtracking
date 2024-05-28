@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /*override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode==101){
             Adtraking.onRequestPermissionsResult(requestCode, grantResults)
@@ -44,6 +44,6 @@ class MainActivity : AppCompatActivity() {
         if (requestCode==100 || requestCode==200){
             Adtraking.onActivityResult(requestCode,resultCode)
         }
-    }*/
+    }
 
 }
