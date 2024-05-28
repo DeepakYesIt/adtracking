@@ -34,6 +34,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.uppercase
+import retrofit2.Call
+import retrofit2.Response
 import java.net.NetworkInterface
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
@@ -533,7 +535,7 @@ class Adtraking {
             val currentLocale = Locale.getDefault()
             val languageDisplayName = currentLocale.getDisplayName(currentLocale)
 
-            /*val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
+            val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
 
             val call: Call<ApiModel> = apiInterface.addData(
                 licensekey,
@@ -604,7 +606,7 @@ class Adtraking {
                     )
                     Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT).show()
                 }
-            })*/
+            })
         }
 
         // this function is call check user internet or not if network is not enable then return the false
