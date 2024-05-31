@@ -1,42 +1,35 @@
 package com.yesitlabs.adtraking
 
-import android.app.AlertDialog
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.Settings
-import com.google.android.gms.ads.identifier.AdvertisingIdClient
-import kotlinx.coroutines.runBlocking
 
 
 class GPSTracker(private val mContext: Context) : LocationListener {
 
     // flag for GPS status
-    var isGPSEnabled = false
+    private var isGPSEnabled = false
 
     // flag for network status
-    var isNetworkEnabled = false
+    private var isNetworkEnabled = false
 
     // flag for GPS status
-    var canGetLocation = false
+    private var canGetLocation = false
 
-    var location: Location? = null // location
-    var latitude: Double = 0.0 // latitude
-    var longitude: Double = 0.0 // longitude
+    private var location: Location? = null // location
+    private var latitude: Double = 0.0 // latitude
+    private var longitude: Double = 0.0 // longitude
 
     // The minimum distance to change Updates in meters
-    private val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 1 // 10 meters
+    private val MINDISTANCECHANGEFORUPDATES: Long = 1 // 10 meters
 
     // The minimum time between updates in milliseconds
-    private val MIN_TIME_BW_UPDATES: Long = 1 // 1 minute
+    private val MINTIMEBWUPDATES: Long = 1 // 1 minute
 
     // Declaring a Location Manager
-    var locationManager: LocationManager? = null
+    private var locationManager: LocationManager? = null
 
     init {
         getLocation()
@@ -68,8 +61,8 @@ class GPSTracker(private val mContext: Context) : LocationListener {
                         }
                         it.requestLocationUpdates(
                             LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
+                            MINTIMEBWUPDATES,
+                            MINDISTANCECHANGEFORUPDATES.toFloat(), this
                         )
                         location = it.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
                         location?.let { loc ->
@@ -85,8 +78,8 @@ class GPSTracker(private val mContext: Context) : LocationListener {
                         if (location == null) {
                             it.requestLocationUpdates(
                                 LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES.toFloat(), this
+                                MINTIMEBWUPDATES,
+                                MINDISTANCECHANGEFORUPDATES.toFloat(), this
                             )
                             location = it.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                             location?.let { loc ->

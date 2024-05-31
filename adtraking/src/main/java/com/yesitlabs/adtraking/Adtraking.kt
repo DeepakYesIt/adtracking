@@ -10,9 +10,7 @@ import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.location.*
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.net.Uri
+import android.net.*
 import android.net.wifi.WifiInfo
 import android.net.wifi.WifiManager
 import android.os.Build
@@ -41,19 +39,22 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
-import java.util.concurrent.Executors
 
 
 class Adtraking {
+
+
     companion object {
+
         private var time: Long = 0
         private lateinit var gender: String
         private lateinit var licensekey: String
         private lateinit var yod: String
         private lateinit var email: String
-        private var advertisingId=""
+        private var advertisingId = ""
+
         @SuppressLint("StaticFieldLeak")
-        private lateinit var context:Context
+        private lateinit var context: Context
 
         // this function call for Device Type
         private fun getDeviceType(context: Context): String {
@@ -82,7 +83,6 @@ class Adtraking {
                         if (!addr.isLoopbackAddress) {
                             val ipAddr = addr.hostAddress
                             val isIPv4 = ipAddr!!.indexOf(':') < 0
-
                             if (useIPv4) {
                                 if (isIPv4) return ipAddr
                             } else {
@@ -162,14 +162,19 @@ class Adtraking {
         // this function call for Connection Country Code
         private fun getConnectionCountryCode(context: Context): String {
             val countryCode: String
-            val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            val telephonyManager =
+                context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             countryCode = telephonyManager.networkCountryIso
             return countryCode
         }
 
         // this function call for postalCode and country
-        private fun recievePostalCoadeAndCountry(context: Context, latitude: Double, longitude: Double):String {
-            val postalCodeAndCountry:String
+        private fun recievePostalCoadeAndCountry(
+            context: Context,
+            latitude: Double,
+            longitude: Double
+        ): String {
+            val postalCodeAndCountry: String
             val geocoder = Geocoder(context, Locale.getDefault())
             postalCodeAndCountry = try {
                 val addresses = geocoder.getFromLocation(latitude, longitude, 1)
@@ -179,20 +184,20 @@ class Adtraking {
                     val country = address?.countryName
                     "$postalCode:$country"
                 } else {
-                    "No Post Code Found "+":"+"No Country Found"
+                    "No Post Code Found " + ":" + "No Country Found"
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                "No Post Code Found "+":"+"No Country Found"
+                "No Post Code Found " + ":" + "No Country Found"
             }
-            return  postalCodeAndCountry
+            return postalCodeAndCountry
         }
 
 
-
-        // this function call for start session
-        fun startSession(context:Context): Long {
-            this.context=context
+        /** this function call for start session when app is open then function is call because user
+        get the start time to calculate the total duration */
+        fun startSession(context: Context): Long {
+            this.context = context
             // This is CoroutineScope and get the Advertising Id if user enable the Advertising
             // from the setting
             getAdvertisingId()
@@ -202,47 +207,48 @@ class Adtraking {
         private fun requestLocationPermission(context: Context) {
             // Request the location permission from the user
             ActivityCompat.requestPermissions(
-                context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101)
+                context as Activity, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 101
+            )
         }
 
 
-       /**
-        * The onRequestPermissionsResult function is called when the user responds to a permission request. It takes two parameters: requestCode (an integer representing the code for the permission request) and grantResults (an array of integers representing the result for each requested permission).
-       Within the function:
+        /**
+         * The onRequestPermissionsResult function is called when the user responds to a permission request. It takes two parameters: requestCode (an integer representing the code for the permission request) and grantResults (an array of integers representing the result for each requested permission).
+        Within the function:
 
-       1. It checks if the requestCode is 101, indicating that the permission request pertains to location services.
+        1. It checks if the requestCode is 101, indicating that the permission request pertains to location services.
 
-       2. It verifies if grantResults is not empty and whether the first element in grantResults array indicates that the permission was granted.
+        2. It verifies if grantResults is not empty and whether the first element in grantResults array indicates that the permission was granted.
 
-            Note: There is an error in the permission check logic.
-            * It should use grantResults[0] == PackageManager.PERMISSION_GRANTED, but it incorrectly uses grantResults[0] + grantResults[0] == PackageManager.PERMISSION_GRANTED.
+        Note: There is an error in the permission check logic.
+         * It should use grantResults[0] == PackageManager.PERMISSION_GRANTED, but it incorrectly uses grantResults[0] + grantResults[0] == PackageManager.PERMISSION_GRANTED.
 
-       3. If the permission is granted, it calls the displayLocationSettingsRequest(context) method, which presumably initiates a request to display the location settings.
+        3. If the permission is granted, it calls the displayLocationSettingsRequest(context) method, which presumably initiates a request to display the location settings.
 
-       4. If the permission is not granted, it calls the alertBoxLocation() method, which likely displays an alert box to the user indicating that location permissions are necessary.
-        */
+        4. If the permission is not granted, it calls the alertBoxLocation() method, which likely displays an alert box to the user indicating that location permissions are necessary.
+         */
 
-       fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
+        fun onRequestPermissionsResult(requestCode: Int, grantResults: IntArray) {
             // Check if the location permission is granted by the user
             if (requestCode == 101 && grantResults.isNotEmpty() && (grantResults[0] + grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    displayLocationSettingsRequest(context)
-                } else {
-                    alertBoxLocation()
-                }
+                displayLocationSettingsRequest(context)
+            } else {
+                alertBoxLocation()
+            }
         }
 
 
         /**
          *
-         The onActivityResult function is called when an activity that was started for a result returns its result. This function takes two parameters: requestCode (an integer identifying the request) and resultCode (an integer representing the result of the activity).
+        The onActivityResult function is called when an activity that was started for a result returns its result. This function takes two parameters: requestCode (an integer identifying the request) and resultCode (an integer representing the result of the activity).
         Within the function:
 
         1. It first checks if the requestCode is 100, indicating that the result is related to the location permission request.
 
         2. If the requestCode is 100, it then checks if the resultCode is Activity.RESULT_OK, which indicates that the location permission was successfully granted by the user.
 
-            1. If the resultCode is Activity.RESULT_OK, it calls the apiData() method, which presumably initiates some data fetching or API call that requires location access.
-            2. If the resultCode is not Activity.RESULT_OK, it shows a toast message to the user saying "Please turn on location".
+        1. If the resultCode is Activity.RESULT_OK, it calls the apiData() method, which presumably initiates some data fetching or API call that requires location access.
+        2. If the resultCode is not Activity.RESULT_OK, it shows a toast message to the user saying "Please turn on location".
 
         3. If the requestCode is not 100, it calls the displayLocationSettingsRequest(context) method, which likely initiates a request to display the location settings to the user.
 
@@ -255,7 +261,7 @@ class Adtraking {
                 } else {
                     Toast.makeText(context, "Please turn on location", Toast.LENGTH_SHORT).show()
                 }
-            }else{
+            } else {
                 displayLocationSettingsRequest(context)
             }
         }
@@ -275,7 +281,7 @@ class Adtraking {
                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                 val uri = Uri.fromParts("package", context.packageName, null)
                 intent.data = uri
-                startActivityForResult(context as Activity, intent,200,null)
+                startActivityForResult(context as Activity, intent, 200, null)
             }
             //performing cancel action
             builder.setNeutralButton("Cancel") { _, _ ->
@@ -302,7 +308,8 @@ class Adtraking {
             }
             val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
             builder.setAlwaysShow(true)
-            val task: Task<LocationSettingsResponse> = LocationServices.getSettingsClient(context).checkLocationSettings(builder.build())
+            val task: Task<LocationSettingsResponse> =
+                LocationServices.getSettingsClient(context).checkLocationSettings(builder.build())
             task.addOnSuccessListener {
                 apiData()
             }
@@ -310,7 +317,10 @@ class Adtraking {
                 val status = (exception as? ResolvableApiException)?.status
                 when (status?.statusCode) {
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
-                        Log.i("Sdk", "Location settings are not satisfied. Show the user a dialog to upgrade location settings")
+                        Log.i(
+                            "Sdk",
+                            "Location settings are not satisfied. Show the user a dialog to upgrade location settings"
+                        )
                         try {
                             status.resolution?.let {
                                 // Show the dialog by calling startIntentSenderForResult(), and check the result in onActivityResult().
@@ -329,7 +339,10 @@ class Adtraking {
                         }
                     }
                     LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE ->
-                        Log.i("Sdk", "Location settings are inadequate, and cannot be fixed here. Dialog not created.")
+                        Log.i(
+                            "Sdk",
+                            "Location settings are inadequate, and cannot be fixed here. Dialog not created."
+                        )
                 }
             }
         }
@@ -390,14 +403,19 @@ class Adtraking {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             } else {
-                val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-                telephonyManager.imei ?: Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+                val telephonyManager =
+                    context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                telephonyManager.imei ?: Settings.Secure.getString(
+                    context.contentResolver,
+                    Settings.Secure.ANDROID_ID
+                )
             }
         }
 
         // this function call for BSSID
         private fun getBSSID(context: Context): String? {
-            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val wifiManager =
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             val wifiInfo = wifiManager.connectionInfo
             return wifiInfo?.bssid
         }
@@ -405,7 +423,8 @@ class Adtraking {
 
         // this function call for SSID
         private fun getSSID(context: Context): String {
-            val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+            val wifiManager =
+                context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
             if (wifiManager.isWifiEnabled) {
                 val wifiInfo: WifiInfo? = wifiManager.connectionInfo
                 wifiInfo?.let {
@@ -482,13 +501,15 @@ class Adtraking {
          * This function call when all data from the user and click the final function
          */
         @SuppressLint("HardwareIds")
-        fun froyoUploadData(gender: String, licenseKey: String, yod: String, email:String) {
+        fun froyoUploadData(gender: String, licenseKey: String, yod: String, email: String) {
             // This is check condition if network is enable then execute the if condition
             if (isOnline(context)) {
-                this.gender=gender
-                this.licensekey=licenseKey
-                this.yod=yod
-                this.email=email
+                this.gender = gender
+                this.licensekey = licenseKey
+
+                // This is date of birth and enter the YYYY/MM/DD format
+                this.yod = yod
+                this.email = email
                 // This is CoroutineScope and get the Advertising Id if user enable the Advertising
                 // from the setting
                 getAdvertisingId()
@@ -496,9 +517,9 @@ class Adtraking {
                 if (isLocationPermissionGranted(context)) {
                     // Location permission is already granted, and check gps is enable or not if enable the call the api
                     // other wise user show the alert box of location
-                    if (isGPSEnabled(context)){
+                    if (isGPSEnabled(context)) {
                         apiData()
-                    }else{
+                    } else {
                         displayLocationSettingsRequest(context)
                     }
                 } else {
@@ -506,35 +527,41 @@ class Adtraking {
                     requestLocationPermission(context)
                 }
             } else {
-                Toast.makeText(context, "Please check your Internet connection", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Please check your Internet connection", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
+
+        /**
+         * This function get the advertising id from the user, if user enable the permission from the ads in the settings
+         */
         private fun getAdvertisingId() {
-            CoroutineScope(Dispatchers.IO).launch{
+            CoroutineScope(Dispatchers.IO).launch {
                 try {
                     val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
                     val adId = adInfo.id
                     if (adId != null) {
-                        advertisingId=adId
+                        advertisingId = adId
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    advertisingId=e.message.toString()
+                    advertisingId = e.message.toString()
                 }
             }
         }
 
         // This function is use for check gps enable or not
         private fun isGPSEnabled(context: Context): Boolean {
-            val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
         }
 
 
         /* This api call when location is enable and get the location from the user mobile device and
          send the all data in the admin */
-        private fun apiData(){
+        private fun apiData() {
             var horizontalAccuracy = 0.0F
             var verticalAccuracy = 0.0F
             var speed = 0.0F
@@ -543,23 +570,24 @@ class Adtraking {
             var altitude = 0.0
             var locationType = ""
             var getPostalCode = ""
-            var country=""
-            val gps=GPSTracker(context)
-            if (gps.getLocation() != null) {
-                horizontalAccuracy = gps.getLocation()!!.accuracy
-                verticalAccuracy = gps.getLocation()!!.verticalAccuracyMeters
+            var country = ""
+            val gps = GPSTracker(context)
+            val gpsLocation= gps.getLocation()
+            if (gpsLocation != null) {
+                horizontalAccuracy = gpsLocation.accuracy
+                verticalAccuracy = gpsLocation.verticalAccuracyMeters
                 gpsLat = gps.getLatitude()
                 gpsLong = gps.getLongitude()
-                altitude = gps.getLocation()!!.altitude
-                locationType = gps.getLocation()!!.provider.toString()
-                val postalcodcountry = recievePostalCoadeAndCountry(context,gps.getLatitude(), gps.getLongitude())
+                altitude = gpsLocation.altitude
+                locationType = gpsLocation.provider.toString()
+                val postalcodcountry = recievePostalCoadeAndCountry(context, gps.getLatitude(), gps.getLongitude())
                 getPostalCode = postalcodcountry.split(":")[0]
-                country=postalcodcountry.split(":")[1]
-                speed = gps.getLocation()!!.speedAccuracyMetersPerSecond
+                country = postalcodcountry.split(":")[1]
+                speed = gpsLocation.speedAccuracyMetersPerSecond
             }
 
             val deviceModel = getDeviceModel()
-            val maidID = "GAID"
+            val maididType = "GAID"
             val cellId = getVendorIdentifier(context)
             val userAgent = getUserAgent(context)
             val language = getKeyboardLanguage(context)
@@ -575,7 +603,7 @@ class Adtraking {
             val mnc = context.resources.configuration.mnc
             val mcc = context.resources.configuration.mcc
             val mSISDN = calculateSHA256Hash("Phone")
-            val hem=calculateMD5HashEmail(email)
+            val hem = calculateMD5HashEmail(email)
 
             // Retrieve the default locale/language of the device
             val currentLocale = Locale.getDefault()
@@ -591,7 +619,7 @@ class Adtraking {
                 gpsLong.toString(),
                 gender,
                 altitude.toString(),
-                maidID,
+                maididType,
                 cellId,
                 userAgent,
                 language,
@@ -658,10 +686,12 @@ class Adtraking {
         // this function is call check user internet or not if network is not enable then return the false
         private fun isOnline(context: Context?): Boolean {
             context ?: return false
-            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+            val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
             connectivityManager ?: return false
             val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            val networkCapabilities =
+                connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
             return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
         }
 

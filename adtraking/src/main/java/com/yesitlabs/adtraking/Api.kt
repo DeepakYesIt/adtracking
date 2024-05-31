@@ -18,7 +18,7 @@ interface Api {
         @Field("longitude") longitude: String?,
         @Field("gender") gender: String?,
         @Field("altitude") altitude: String?,
-        @Field("maid_type") maid_id: String?,
+        @Field(" ") maid_id: String?,
         @Field("cell_id") cell_id: String?,
         @Field("useragent") useragent: String?,
         @Field("keyboard_language") keyboard_language: String?,
