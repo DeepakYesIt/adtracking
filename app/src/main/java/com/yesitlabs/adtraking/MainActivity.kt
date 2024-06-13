@@ -21,10 +21,27 @@ class MainActivity : AppCompatActivity() {
 
         textView=findViewById(R.id.tv_session)
 
+        Adtraking.startSession()
 
+        textView.setOnClickListener{
+            Adtraking.froyoUploadData(this,"Male","34FcLvWWlqhBlEQx","1996/05/07","yesitlabs@gmail.com")
+        }
 
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode==101){
+            Adtraking.onRequestPermissionsResult(requestCode, grantResults)
+        }
+    }
 
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode==100 || requestCode==200){
+            Adtraking.onActivityResult(requestCode,resultCode)
+        }
+    }
 
 }

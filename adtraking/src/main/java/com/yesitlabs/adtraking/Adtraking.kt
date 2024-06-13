@@ -49,6 +49,7 @@ class Adtraking:AppCompatActivity(){
         private lateinit var licensekey: String
         private lateinit var yod: String
         private lateinit var email: String
+
         @SuppressLint("StaticFieldLeak")
         private lateinit var context: Context
 
@@ -208,13 +209,8 @@ class Adtraking:AppCompatActivity(){
 
         /** this function call for start session when app is open then function is call because user
         get the start time to calculate the total duration */
-        fun startSession(context: Context) {
-            this.context = context
-            // This is CoroutineScope and get the Advertising Id if user enable the Advertising
-            // from the setting
-//            getAdvertisingId()
+        fun startSession() {
             time=Calendar.getInstance().time.time
-
         }
 
         private fun requestLocationPermission(context: Context) {
@@ -514,7 +510,8 @@ class Adtraking:AppCompatActivity(){
          * This function call when all data from the user and click the final function
          */
         @SuppressLint("HardwareIds")
-         fun froyoUploadData(gender: String, licenseKey: String, yod: String, email: String) {
+         fun froyoUploadData(context: Context,gender: String, licenseKey: String, yod: String, email: String) {
+            this.context=context
             // This is check condition if network is enable then execute the if condition
             if (isOnline(context)) {
                 this.gender = gender
