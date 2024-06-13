@@ -20,10 +20,10 @@ import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.webkit.WebSettings
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -40,7 +40,7 @@ import java.security.NoSuchAlgorithmException
 import java.util.*
 
 
-class Adtraking {
+class Adtraking:AppCompatActivity(){
 
     companion object {
 
@@ -49,8 +49,6 @@ class Adtraking {
         private lateinit var licensekey: String
         private lateinit var yod: String
         private lateinit var email: String
-        private var advertisingId = ""
-
         @SuppressLint("StaticFieldLeak")
         private lateinit var context: Context
 
@@ -58,8 +56,8 @@ class Adtraking {
         private fun getDeviceType(context: Context): String {
             return when (context.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) {
                 Configuration.SCREENLAYOUT_SIZE_LARGE,
-                Configuration.SCREENLAYOUT_SIZE_XLARGE -> "Tablet"
-                else -> "Phone"
+                Configuration.SCREENLAYOUT_SIZE_XLARGE -> "tablet"
+                else -> "mobile"
             }
         }
 
@@ -123,40 +121,57 @@ class Adtraking {
             return "No Connection"
         }
 
-
         // this function call for device Brand
         private var deviceBrand = Build.MANUFACTURER
 
         // this function call for device_model_hmv
         private var device_model_hmv = Build.MODEL
 
-        // this function call for deviceOS
-        private var deviceOS = "Android ${Build.VERSION.SDK_INT} (${Build.VERSION.RELEASE})"
+
 
         // this line use for deviceOS
 //        private val deviceOSV = android.os.Build.VERSION.SDK_INT
         private val deviceOSV = Build.VERSION.RELEASE
 
         // this function call for ConnectionProvider
-        private fun getConnectionProvider(context: Context): String {
-            var connectionProvider = "Not Connected"
-            val connectivityManager =
-                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val networkCapabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (networkCapabilities != null) {
-                connectionProvider =
-                    if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        "Wi-Fi"
-                    } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        "Mobile Data"
-                    } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                        "Ethernet"
-                    } else {
-                        "Other"
+        private fun getConnectionProvider(context: Context): String? {
+            val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                val network = connectivityManager.activeNetwork ?: return null
+                val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return null
+                return when {
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                        val wifiManager = context.applicationContext.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                        val wifiInfo = wifiManager.connectionInfo
+                        return if (wifiInfo.ssid != null && wifiInfo.ssid != "<unknown ssid>") {
+                            wifiInfo.ssid.replace("\"", "") // Remove quotes around the SSID
+                        } else {
+                            "Unknown Wi-Fi Network"
+                        }
                     }
+                    networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                        val networkInfo = telephonyManager.networkOperatorName
+                        networkInfo ?: "Unknown Cellular Network"
+                    }
+                    else -> null
+                }
+            } else {
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo ?: return null
+                return when (activeNetworkInfo.type) {
+                    ConnectivityManager.TYPE_WIFI -> {
+                        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                        val networkInfo = telephonyManager.networkOperatorName
+                        networkInfo ?: "Unknown Cellular Network"
+                    }
+                    ConnectivityManager.TYPE_MOBILE -> {
+                        val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+                        val networkInfo = telephonyManager.networkOperatorName
+                        networkInfo ?: "Unknown Cellular Network"
+                    }
+                    else -> null
+                }
             }
-            return connectionProvider
         }
 
         // this function call for Connection Country Code
@@ -170,57 +185,36 @@ class Adtraking {
 
         // this function call for postalCode and country
         private suspend fun recievePostalCoadeAndCountry(context: Context, latitude: Double, longitude: Double): String {
-           /* val postalCodeAndCountry: String
-            val geocoder = Geocoder(context, Locale.getDefault())
-            postalCodeAndCountry = try {
-                val addresses = geocoder.getFromLocation(latitude, longitude, 1)
-                if (addresses!!.isNotEmpty()) {
-                    val address = addresses[0]
-                    val postalCode = address?.postalCode
-                    val country = address?.countryName
-                    "$postalCode:$country"
-                } else {
+            return withContext(Dispatchers.IO) {
+                val geocoder = Geocoder(context, Locale.getDefault())
+                var country = ""
+                var postalCode = ""
+                try {
+                    val addresses: List<Address>? = geocoder.getFromLocation(latitude, longitude, 1)
+                    addresses.let {
+                        if (addresses!!.isNotEmpty()){
+                            val address = addresses[0]
+                            postalCode = address.postalCode.toString()
+                            country = address.countryName.toString()
+                        }
+                    }
+                } catch (e: Exception) {
                     "No Post Code Found " + ":" + "No Country Found"
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                "No Post Code Found " + ":" + "No Country Found"
-            }*/
-         return   withContext(Dispatchers.IO) {
-                val viewModelScope = CoroutineScope(Dispatchers.IO)
-                Log.d("TESTING_THREAD_NAME", "${Thread.currentThread().name}" + "outside")
-                val deferredString: Deferred<String> = viewModelScope.async(Dispatchers.IO) {
-                    Log.d("TESTING_THREAD_NAME", "${Thread.currentThread().name}" + "inside")
-                    val geocoder = Geocoder(context, Locale.getDefault())
-                    var country = ""
-                    var postalCode = ""
-                    try {
-                        val addresses: List<Address>? =
-                            geocoder.getFromLocation(latitude, longitude, 1)
-                        val address = addresses?.get(0)
-                        postalCode = address?.postalCode.toString()
-                        country = address?.countryName.toString()
-                        "$postalCode:$country"
-                    } catch (e: Exception) {
-                        e.printStackTrace();
-                        "No Post Code Found " + ":" + "No Country Found"
-                    }
-                    "$postalCode:$country"
-                }
-                val result: String = deferredString.await()
-                 result
+                "$postalCode:$country"
             }
         }
 
 
         /** this function call for start session when app is open then function is call because user
         get the start time to calculate the total duration */
-        fun startSession(context: Context): Long {
+        fun startSession(context: Context) {
             this.context = context
             // This is CoroutineScope and get the Advertising Id if user enable the Advertising
             // from the setting
 //            getAdvertisingId()
-            return Calendar.getInstance().time.time
+            time=Calendar.getInstance().time.time
+
         }
 
         private fun requestLocationPermission(context: Context) {
@@ -496,10 +490,10 @@ class Adtraking {
 
 
         // this function call for MSISDN
-        private fun calculateSHA256Hash(value: String): String {
+        private fun calculateSHA256Hash(phone:String): String {
             try {
                 val digest: MessageDigest = MessageDigest.getInstance("SHA-256")
-                val hashBytes: ByteArray = digest.digest(value.toByteArray(StandardCharsets.UTF_8))
+                val hashBytes: ByteArray = digest.digest(phone.toByteArray(StandardCharsets.UTF_8))
                 val hexString = StringBuilder()
                 for (hashByte in hashBytes) {
                     val hex = Integer.toHexString(0xff and hashByte.toInt())
@@ -554,9 +548,10 @@ class Adtraking {
          * This function get the advertising id from the user, if user enable the permission from the ads in the settings
          */
         private suspend fun getAdvertisingId():String {
-            /*CoroutineScope(Dispatchers.IO).launch {
+            return withContext(Dispatchers.IO) {
+                var advertisingId = ""
                 try {
-                    val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
+                    val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context.applicationContext)
                     val adId = adInfo.id
                     if (adId != null) {
                         advertisingId = adId
@@ -565,27 +560,7 @@ class Adtraking {
                     e.printStackTrace()
                     advertisingId = e.message.toString()
                 }
-            }*/
-            return   withContext(Dispatchers.IO) {
-                val viewModelScope = CoroutineScope(Dispatchers.IO)
-                Log.d("TESTING_THREAD_NAME", "${Thread.currentThread().name}" + "outside")
-                val deferredString: Deferred<String> = viewModelScope.async(Dispatchers.IO) {
-
-                    try {
-                        val adInfo = AdvertisingIdClient.getAdvertisingIdInfo(context)
-                        val adId = adInfo.id
-                        if (adId != null) {
-                            advertisingId = adId
-                        }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        advertisingId = e.message.toString()
-                    }
-
-                    advertisingId
-                }
-                val result: String = deferredString.await()
-                result
+                advertisingId
             }
         }
 
@@ -599,117 +574,155 @@ class Adtraking {
 
         /* This api call when location is enable and get the location from the user mobile device and
          send the all data in the admin */
+        @OptIn(DelicateCoroutinesApi::class)
         private  fun apiData() {
             GlobalScope.launch(Dispatchers.Main) {
-                var horizontalAccuracy = 0.0F
-                var verticalAccuracy = 0.0F
-                var speed = 0.0F
-                var gpsLat = 0.0
-                var gpsLong = 0.0
-                var altitude = 0.0
-                var locationType = ""
-                var getPostalCode = ""
-                var country = ""
-                val gps = GPSTracker(context)
+                val horizontalAccuracy: Float
+                val verticalAccuracy: Float
+                val speed: Float
+                val gpsLat: Double
+                val gpsLong: Double
+                val altitude: Double
+                val locationType: String
+                val getPostalCode: String
+                val country: String
+                val gps = TrackerGps(context)
                 val gpsLocation = gps.getLocation()
                 if (gpsLocation != null) {
                     horizontalAccuracy = gpsLocation.accuracy
                     verticalAccuracy = gpsLocation.verticalAccuracyMeters
-                    gpsLat = gps.getLatitude()
-                    gpsLong = gps.getLongitude()
+                    gpsLat = gpsLocation.latitude
+                    gpsLong = gpsLocation.longitude
                     altitude = gpsLocation.altitude
                     locationType = gpsLocation.provider.toString()
                     speed = gpsLocation.speedAccuracyMetersPerSecond
-                    Log.d("TESTING_THREAD_NAME","before execute")
-                    val postalcodcountry = recievePostalCoadeAndCountry(context, gps.getLatitude(), gps.getLongitude())
-                     Log.d("TESTING_THREAD_NAME",postalcodcountry.toString())
+                    val postalcodcountry = recievePostalCoadeAndCountry(context, gpsLocation.latitude, gpsLocation.longitude)
                     getPostalCode = postalcodcountry.split(":")[0]
                     country = postalcodcountry.split(":")[1]
 
-                }
 
-                // This is CoroutineScope and get the Advertising Id if user enable the Advertising
-                // from the setting
-                advertisingId=getAdvertisingId()
+                    // This is CoroutineScope and get the Advertising Id if user enable the Advertising
+                    // from the setting
 
-                val deviceModel = getDeviceModel()
-                val maididType = "GAID"
-                val cellId = getVendorIdentifier(context)
-                val userAgent = getUserAgent(context)
-                val language = getKeyboardLanguage(context)
-                val appBundleId = getAppBundleId(context)
-                val appName = getAppName(context)
-                val sSID = getSSID(context)
-                val bSSID = getBSSID(context)
-                val imei = getIMEI(context)
-                val countryCode = getConnectionCountryCode(context)
-                val connectionProvider = getConnectionProvider(context)
-                val connectionType = getConnectionType(context)
-                val deviceType = getDeviceType(context)
-                val mnc = context.resources.configuration.mnc
-                val mcc = context.resources.configuration.mcc
-                val mSISDN = calculateSHA256Hash("Phone")
-                val hem = calculateMD5HashEmail(email)
+                    val advertisingId = getAdvertisingId()
 
-                // Retrieve the default locale/language of the device
-                val currentLocale = Locale.getDefault()
-                val languageDisplayName = currentLocale.getDisplayName(currentLocale)
+                    val deviceModel = getDeviceModel()
 
-                val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
+                    val maididType = "GAID"
 
-                val call: Call<ApiModel> = apiInterface.addData(
-                    licensekey,
-                    deviceType,
-                    deviceModel,
-                    gpsLat.toString(),
-                    gpsLong.toString(),
-                    gender,
-                    altitude.toString(),
-                    maididType,
-                    cellId,
-                    userAgent,
-                    language,
-                    appBundleId,
-                    appName,
-                    sSID,
-                    bSSID,
-                    imei,
-                    hem,
-                    locationType,
-                    verticalAccuracy.toString(),
-                    horizontalAccuracy.toString(),
-                    country,
-                    countryCode,
-                    connectionProvider,
-                    deviceOSV.toString(),
-                    deviceOS,
-                    device_model_hmv,
-                    deviceBrand,
-                    connectionType,
-                    ipv4Address,
-                    ipv6Address,
-                    getPostalCode,
-                    yod,
-                    mnc.toString(),
-                    mcc.toString(),
-                    getSessionStart(time),
-                    "",
-                    speed.toString(),
-                    formattedTimestamp.toString(),
-                    mSISDN,
-                    advertisingId,
-                    languageDisplayName
-                )
-                call.enqueue(object : retrofit2.Callback<ApiModel> {
-                    override fun onResponse(call: Call<ApiModel>, response: Response<ApiModel>) {
-                        if (response.body()!!.success) {
-                            val sendError = ApiModel(
-                                response.body()!!.license_key,
-                                response.body()!!.message,
-                                response.body()!!.success
-                            )
-                            Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT).show()
-                        } else {
+                    val cellId = getVendorIdentifier(context)
+
+                    val userAgent = getUserAgent(context)
+
+                    val language = getKeyboardLanguage(context)
+
+                    val appBundleId = getAppBundleId(context)
+
+                    val appName = getAppName(context)
+
+                    val sSID =  getSSID(context)
+
+                    val bSSID = getBSSID(context)
+
+                    val imei = getIMEI(context)
+
+                    val countryCode = getConnectionCountryCode(context)
+
+                    val connectionProvider = getConnectionProvider(context)
+
+                    val connectionType = getConnectionType(context)
+
+                    val deviceType = getDeviceType(context)
+
+                    val mnc = context.resources.configuration.mnc
+
+                    val mcc = context.resources.configuration.mcc
+
+                    val mSISDN = calculateSHA256Hash("Phone")
+
+                    val hem = calculateMD5HashEmail(email)
+
+
+                    // Retrieve the default locale/language of the device
+                    val currentLocale = Locale.getDefault()
+
+                    val languageDisplayName = currentLocale.getDisplayName(currentLocale)
+
+                    val sessionTime=getSessionStart(time)
+
+                    Log.d("******","session :-"+sessionTime)
+
+
+                    val apiInterface: Api = RetrofitClient.getClient()!!.create(Api::class.java)
+
+                    val call: Call<ApiModel> = apiInterface.addData(
+                        licensekey,
+                        deviceType,
+                        deviceModel,
+                        gpsLat.toString(),
+                        gpsLong.toString(),
+                        gender,
+                        altitude.toString(),
+                        maididType,
+                        cellId,
+                        userAgent,
+                        language,
+                        appBundleId,
+                        appName,
+                        sSID,
+                        bSSID,
+                        imei,
+                        hem,
+                        locationType,
+                        verticalAccuracy.toString(),
+                        horizontalAccuracy.toString(),
+                        country,
+                        countryCode,
+                        connectionProvider,
+                        deviceOSV.toString(),
+                        "android",
+                        device_model_hmv,
+                        deviceBrand,
+                        connectionType,
+                        ipv4Address,
+                        ipv6Address,
+                        getPostalCode,
+                        yod,
+                        mnc.toString(),
+                        mcc.toString(),
+                        sessionTime,
+                        "",
+                        speed.toString(),
+                        formattedTimestamp.toString(),
+                        mSISDN,
+                        advertisingId,
+                        languageDisplayName
+                    )
+                    call.enqueue(object : retrofit2.Callback<ApiModel> {
+                        override fun onResponse(
+                            call: Call<ApiModel>,
+                            response: Response<ApiModel>
+                        ) {
+                            if (response.body()!!.success) {
+                                val sendError = ApiModel(
+                                    response.body()!!.license_key,
+                                    response.body()!!.message,
+                                    response.body()!!.success
+                                )
+                                Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                val sendError = ApiModel(
+                                    license_key = "non",
+                                    message = "Something went wrong",
+                                    success = false
+                                )
+                                Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
+
+                        override fun onFailure(call: Call<ApiModel>, t: Throwable) {
                             val sendError = ApiModel(
                                 license_key = "non",
                                 message = "Something went wrong",
@@ -717,17 +730,10 @@ class Adtraking {
                             )
                             Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT).show()
                         }
-                    }
-
-                    override fun onFailure(call: Call<ApiModel>, t: Throwable) {
-                        val sendError = ApiModel(
-                            license_key = "non",
-                            message = "Something went wrong",
-                            success = false
-                        )
-                        Toast.makeText(context, sendError.message, Toast.LENGTH_SHORT).show()
-                    }
-                })
+                    })
+                }else{
+                    Toast.makeText(context, "Api Not working", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 

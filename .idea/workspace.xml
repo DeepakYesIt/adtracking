@@ -7,7 +7,7 @@
   </component>
   <component name="AndroidLogFilters">
     <option name="TOOL_WINDOW_CUSTOM_FILTER" value="TESTING_THREAD_NAME" />
-    <option name="TOOL_WINDOW_LOG_LEVEL" value="debug" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="error" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="AutoImportSettings">
@@ -15,13 +15,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="11c10b06-c841-4540-8fa4-38b72af50b90" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/checksums.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/checksums/sha1-checksums.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/checksums/sha1-checksums.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adtraking/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/adtraking/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt" beforeDir="false" afterPath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/RetrofitClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/RetrofitClient.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Api.kt" beforeDir="false" afterPath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Api.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/GPSTracker.kt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/yesitlabs/adtraking/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/yesitlabs/adtraking/MainActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -56,7 +64,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="DEBUGGABLE_DEVICE" value="samsung-sm_e236b-RZCT40HY04P" />
+    <property name="DEBUGGABLE_DEVICE" value="samsung-sm_g781b-RZCT904GVRD" />
     <property name="DEBUGGABLE_PROCESS" value="com.yesitlabs.adtraking" />
     <property name="DEBUGGER_ID" value="Auto" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -64,10 +72,15 @@
     <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
     <property name="cidr.known.project.marker" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.17" />
     <property name="project.structure.side.proportion" value="0.2" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\Current_project\AddTrackingProject\AddTraking\adtraking\src\main\java\com\yesitlabs\adtraking" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
@@ -157,223 +170,223 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>507</line>
+          <line>502</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>508</line>
-          <option name="timeStamp" value="35" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>509</line>
+          <line>504</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>550</line>
+          <line>545</line>
           <option name="timeStamp" value="37" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>516</line>
+          <line>511</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>518</line>
+          <line>513</line>
           <option name="timeStamp" value="42" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>240</line>
+          <line>235</line>
           <option name="timeStamp" value="44" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>244</line>
+          <line>239</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>230</line>
+          <line>225</line>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>231</line>
+          <line>226</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>287</line>
+          <line>282</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>216</line>
+          <line>210</line>
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>217</line>
+          <line>211</line>
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>520</line>
+          <line>515</line>
           <option name="timeStamp" value="54" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>519</line>
+          <line>514</line>
           <option name="timeStamp" value="55" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>522</line>
+          <line>517</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>523</line>
+          <line>518</line>
           <option name="timeStamp" value="57" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>524</line>
+          <line>519</line>
           <option name="timeStamp" value="58" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>525</line>
+          <line>520</line>
           <option name="timeStamp" value="59" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>529</line>
+          <line>524</line>
           <option name="timeStamp" value="60" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>549</line>
+          <line>544</line>
           <option name="timeStamp" value="61" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>548</line>
+          <line>543</line>
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>545</line>
+          <line>540</line>
           <option name="timeStamp" value="63" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>544</line>
+          <line>539</line>
           <option name="timeStamp" value="64" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>543</line>
+          <line>538</line>
           <option name="timeStamp" value="65" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>542</line>
+          <line>537</line>
           <option name="timeStamp" value="66" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>541</line>
+          <line>536</line>
           <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>540</line>
+          <line>535</line>
           <option name="timeStamp" value="68" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>538</line>
+          <line>533</line>
           <option name="timeStamp" value="69" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>539</line>
+          <line>534</line>
           <option name="timeStamp" value="70" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>537</line>
+          <line>532</line>
           <option name="timeStamp" value="71" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>227</line>
+          <line>222</line>
           <option name="timeStamp" value="72" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>226</line>
+          <line>221</line>
           <option name="timeStamp" value="73" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>234</line>
+          <line>229</line>
           <option name="timeStamp" value="77" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>235</line>
+          <line>230</line>
           <option name="timeStamp" value="78" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>236</line>
+          <line>231</line>
           <option name="timeStamp" value="79" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>238</line>
+          <line>233</line>
           <option name="timeStamp" value="80" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>241</line>
+          <line>236</line>
           <option name="timeStamp" value="84" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>514</line>
-          <option name="timeStamp" value="85" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
-          <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>279</line>
+          <line>274</line>
           <option name="timeStamp" value="86" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>280</line>
+          <line>275</line>
           <option name="timeStamp" value="87" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>291</line>
+          <line>286</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>641</line>
+          <line>623</line>
           <option name="timeStamp" value="91" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
           <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
-          <line>642</line>
+          <line>625</line>
           <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
+          <line>591</line>
+          <option name="timeStamp" value="110" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="kotlin-line">
+          <url>file://$PROJECT_DIR$/adtraking/src/main/java/com/yesitlabs/adtraking/Adtraking.kt</url>
+          <line>590</line>
+          <option name="timeStamp" value="126" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
